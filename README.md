@@ -1,56 +1,45 @@
-<h1 align="center">Vanessa Lima</h1>
+<div align="center">
 
-<h3 align="center">
-QA Automation | Quality Engineering | Test Automation
-</h3>
+# Vanessa Lima
 
-<p align="center">
+### QA Automation • Quality Engineering • Test Automation
 
-Building scalable Test Automation solutions with focus on Quality Engineering, Clean Architecture and Continuous Improvement.
+Building reliable and scalable Test Automation solutions with focus on software quality, maintainable frameworks and continuous improvement.
 
-</p>
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin)](https://www.linkedin.com/in/vanessa-ads/)
+[![GitHub](https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github)](https://github.com/vanessalimaQA)
 
----
-
-# 👋 Sobre
-
-Sou profissional focada em **Quality Assurance** e **QA Automation**, desenvolvendo frameworks de automação com foco em organização, escalabilidade e reutilização de código.
-
-Tenho interesse em arquitetura de testes, automação Web, API Testing, integração contínua e melhoria contínua da qualidade de software.
-
-Atualmente concentro meus estudos e projetos em **Java**, **Playwright**, **Selenium**, **SOAP**, **SQL Server** e evolução de frameworks de automação.
+</div>
 
 ---
 
-# 🚀 Core Skills
+# About
 
-✔ QA Automation
+QA professional focused on **Test Automation**, **Quality Engineering** and development of scalable automation frameworks.
 
-✔ Quality Engineering
+I enjoy designing maintainable solutions using clean architecture principles, reusable components and automation best practices for Web applications, APIs and database validations.
 
-✔ Test Automation Frameworks
-
-✔ Web Automation
-
-✔ API Testing
-
-✔ Regression Testing
-
-✔ Integration Testing
-
-✔ SQL Validation
-
-✔ Test Strategy
-
-✔ Software Quality
-
-✔ Clean Architecture
-
-✔ CI/CD
+My current projects are focused on continuous evolution of automation frameworks using Java and modern testing practices.
 
 ---
 
-# 💻 Tech Stack
+# Core Expertise
+
+- QA Automation
+- Quality Engineering
+- Test Automation Frameworks
+- Web Automation
+- API Testing
+- Regression Testing
+- Integration Testing
+- Database Validation
+- Test Strategy
+- Software Quality
+- Continuous Improvement
+
+---
+
+# Tech Stack
 
 ### Languages
 
@@ -73,95 +62,91 @@ Atualmente concentro meus estudos e projetos em **Java**, **Playwright**, **Sele
 
 - SQL Server
 
-### Tools
+### Build & Version Control
 
 - Maven
 - Git
 - GitHub
-- IntelliJ IDEA
-- VS Code
 
-### Methodologies
+### Agile
 
 - Scrum
 - Kanban
-- Agile
 
 ---
 
-# ⭐ Featured Project
+# Featured Project
 
 ## QA Automation Framework
 
-Framework desenvolvido para automatizar cenários Web e integração com Web Services utilizando arquitetura em camadas.
+Professional automation framework developed using Java with focus on scalability, maintainability and clean architecture.
 
-### Arquitetura
+### Highlights
 
+- Playwright
 - Page Object Model
 - Flow Layer
 - Builder Pattern
 - Repository Pattern
+- SOAP Integration
 - XML Builder
 - XML Parser
-- SOAP Client
-- Database Layer
+- SQL Server Validation
 - Screenshot Evidence
 
-🔗 Projeto
+Repository:
 
-https://github.com/vanessalimaQA/automacao-quitacao
+👉 https://github.com/vanessalimaQA/automacao-quitacao
 
 ---
 
-# 🏗 Engineering Principles
+# Engineering Principles
 
 - Clean Code
 - SOLID
 - Separation of Concerns
-- Reusable Components
-- Maintainability
-- Scalability
 - Low Coupling
 - High Cohesion
+- Reusability
+- Maintainability
+- Scalability
 - Continuous Improvement
 
 ---
 
-# 📚 Current Focus
+# Currently Improving
 
-Atualmente aprofundando conhecimentos em:
+I'm continuously improving my knowledge in:
 
 - REST Assured
 - GitHub Actions
 - Docker
 - Allure Reports
 - CI/CD
-- Software Quality Engineering
 - Test Framework Architecture
+- Software Quality Engineering
 
 ---
 
-# 🎯 Professional Goal
+# Professional Goal
 
-Contribuir para projetos de Engenharia de Qualidade através do desenvolvimento de frameworks de automação confiáveis, escaláveis e preparados para evolução contínua.
-
-Meu objetivo é atuar em equipes que valorizam qualidade, colaboração, melhoria contínua e boas práticas de desenvolvimento.
+Contribute to Quality Engineering initiatives through scalable automation frameworks, reliable testing strategies and continuous improvement of software quality.
 
 ---
 
-# 📊 GitHub
+# GitHub Stats
 
 <p align="center">
 
-![GitHub Stats](https://github-readme-stats.vercel.app/api?username=vanessalimaQA&show_icons=true&theme=github_dark&hide_border=true)
+<img height="170" src="https://github-readme-stats.vercel.app/api?username=vanessalimaQA&show_icons=true&theme=github_dark&hide_border=true"/>
 
-![Top Langs](https://github-readme-stats.vercel.app/api/top-langs/?username=vanessalimaQA&layout=compact&theme=github_dark&hide_border=true)
+<img height="170" src="https://github-readme-stats.vercel.app/api/top-langs/?username=vanessalimaQA&layout=compact&theme=github_dark&hide_border=true"/>
 
 </p>
 
 ---
 
-# 🤝 Let's Connect
+# Connect
 
 💼 LinkedIn
 
@@ -173,9 +158,8 @@ https://github.com/vanessalimaQA
 
 ---
 
-<p align="center">
+<div align="center">
 
-Quality is not only about finding defects.<br>
-It is about building reliable software through automation, collaboration and continuous improvement.
+*"Quality is built through engineering, collaboration and continuous improvement."*
 
-</p>
+</div>
