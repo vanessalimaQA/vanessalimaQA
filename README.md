@@ -2,34 +2,211 @@
 
 # Vanessa Lima
 
-### QA Automation | Quality Engineering | Test Automation
+### QA Automation Engineer
 
-Desenvolvimento de soluções de automação para aplicações Web, APIs e validações de dados, com foco em arquitetura, confiabilidade, manutenção e evolução contínua.
+**Quality Engineering • Test Automation • Software Quality**
 
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-Vanessa_Lima-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/vanessa-ads/)
-[![GitHub](https://img.shields.io/badge/GitHub-vanessalimaQA-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/vanessalimaQA)
+Building reliable automation solutions for Web Applications, APIs and Database Validation through software engineering principles.
+
+<p>
+
+<a href="https://www.linkedin.com/in/vanessa-ads/" target="_blank">
+<img src="https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white"/>
+</a>
+
+<a href="https://github.com/vanessalimaQA" target="_blank">
+<img src="https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white"/>
+</a>
+
+</p>
 
 </div>
 
 ---
 
-## Perfil profissional
+# Professional Summary
 
-Atuo na construção e evolução de projetos de **QA Automation**, aplicando princípios de **Quality Engineering**, organização em camadas e separação de responsabilidades.
+QA Automation Engineer focused on designing scalable, maintainable and reliable automation solutions.
 
-Meu foco está no desenvolvimento de automações reutilizáveis e de fácil manutenção para testes Web, integrações SOAP, validações em banco de dados e regras de negócio.
+Experienced in Web Automation, API Testing, SOAP integrations and Database Validation using Java, applying engineering principles to improve software quality, testing efficiency and delivery confidence.
 
-Atualmente desenvolvo um framework em **Java 21** com **Playwright**, **JUnit 5**, **AssertJ**, **SOAP**, **SQL Server**, **Maven** e **GitHub Actions**, ampliando continuamente sua cobertura para REST APIs, geração dinâmica de massas e relatórios automatizados.
+Currently developing an enterprise-oriented automation framework with emphasis on architecture, maintainability, reusable components and continuous improvement.
 
 ---
 
-## Proposta de valor
+# Core Expertise
 
-- Construção de Test Automation Frameworks escaláveis
-- Automação Web com Playwright e Selenium
-- API Testing com SOAP e evolução para REST
-- Validação de dados e regras de negócio com SQL
-- Organização baseada em Page Object, Flow, Service e Repository
-- Integração contínua com GitHub Actions
-- Evidências automáticas e rastreabilidade das execuções
-- Clean Code, SOLID e Continuous Improvement
+- QA Automation
+- Quality Engineering
+- Test Automation
+- Automation Framework Design
+- Web Automation
+- API Testing
+- SOAP Services
+- Database Validation
+- Regression Testing
+- Integration Testing
+- Smoke Testing
+- Software Quality
+- Continuous Integration
+- Test Strategy
+
+---
+
+# Technology Stack
+
+### Programming
+
+- Java
+- SQL
+
+### Test Automation
+
+- Playwright
+- Selenium
+- JUnit 5
+- AssertJ
+
+### API Testing
+
+- REST Assured
+- SOAP
+- XML
+- Jackson
+
+### Database
+
+- SQL Server
+
+### Build & DevOps
+
+- Maven
+- Git
+- GitHub
+- GitHub Actions
+
+### Agile
+
+- Scrum
+- Kanban
+
+### Tools
+
+- IntelliJ IDEA
+- Postman
+- SoapUI
+
+---
+
+# Featured Project
+
+## QA Automation Framework
+
+Enterprise-oriented automation framework developed using Java and Playwright.
+
+### Highlights
+
+- Web Automation
+- SOAP Integration
+- SQL Server Validation
+- Dynamic Test Data
+- Page Object Model
+- Builder Pattern
+- Repository Pattern
+- Layered Architecture
+- GitHub Actions
+- Continuous Integration
+
+### Repository
+
+🔗 https://github.com/vanessalimaQA/automacao-quitacao
+
+---
+
+# Engineering Principles
+
+- Clean Code
+- SOLID
+- Design Patterns
+- Separation of Concerns
+- Low Coupling
+- High Cohesion
+- Maintainability
+- Scalability
+- Reusable Components
+- Continuous Improvement
+
+---
+
+# Current Focus
+
+Currently improving knowledge in:
+
+- REST API Automation
+- Framework Architecture
+- Docker
+- Allure Reports
+- Performance Testing
+- Software Quality Engineering
+
+---
+
+# GitHub Analytics
+
+<p align="center">
+
+<img height="170" src="https://github-readme-stats.vercel.app/api?username=vanessalimaQA&show_icons=true&theme=github_dark&hide_border=true"/>
+
+<img height="170" src="https://github-readme-stats.vercel.app/api/top-langs/?username=vanessalimaQA&layout=compact&theme=github_dark&hide_border=true"/>
+
+</p>
+
+---
+
+# Featured Technologies
+
+<p>
+
+<img src="https://skillicons.dev/icons?i=java,selenium,maven,git,github,docker"/>
+
+</p>
+
+---
+
+# Professional Values
+
+✔ Software Quality
+
+✔ Automation
+
+✔ Engineering
+
+✔ Collaboration
+
+✔ Continuous Improvement
+
+✔ Maintainability
+
+✔ Reliability
+
+✔ Scalability
+
+---
+
+# Let's Connect
+
+💼 LinkedIn
+
+https://www.linkedin.com/in/vanessa-ads/
+
+💻 GitHub
+
+https://github.com/vanessalimaQA
+
+---
+
+<div align="center">
+
+### Building software quality through automation, engineering and continuous improvement.
+
+</div>
