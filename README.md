@@ -1,212 +1,74 @@
-<div align="center">
+# Financial Validation Platform
 
-# Vanessa Lima
+> Plataforma de Engenharia de Qualidade para Sistemas Financeiros
 
-### QA Automation Engineer
+A **Financial Validation Platform** é uma plataforma desenvolvida para apoiar a validação de sistemas financeiros através da automação de processos, modelagem de regras de negócio e validação de dados críticos.
 
-**Quality Engineering • Test Automation • Software Quality**
+Mais do que um framework de automação, a plataforma concentra conhecimento funcional, preparação de massas, movimentações financeiras, processamento batch, validações de negócio e auditoria das execuções em uma arquitetura única, organizada e preparada para evolução contínua.
 
-Building reliable automation solutions for Web Applications, APIs and Database Validation through software engineering principles.
-
-<p>
-
-<a href="https://www.linkedin.com/in/vanessa-ads/" target="_blank">
-<img src="https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white"/>
-</a>
-
-<a href="https://github.com/vanessalimaQA" target="_blank">
-<img src="https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white"/>
-</a>
-
-</p>
-
-</div>
+Seu principal objetivo é transformar testes financeiros em um processo de engenharia, reduzindo dependências de atividades manuais, aumentando a confiabilidade das validações e preservando o conhecimento de negócio ao longo da evolução dos sistemas.
 
 ---
 
-# Professional Summary
+# Sumário
 
-QA Automation Engineer focused on designing scalable, maintainable and reliable automation solutions.
-
-Experienced in Web Automation, API Testing, SOAP integrations and Database Validation using Java, applying engineering principles to improve software quality, testing efficiency and delivery confidence.
-
-Currently developing an enterprise-oriented automation framework with emphasis on architecture, maintainability, reusable components and continuous improvement.
-
----
-
-# Core Expertise
-
-- QA Automation
-- Quality Engineering
-- Test Automation
-- Automation Framework Design
-- Web Automation
-- API Testing
-- SOAP Services
-- Database Validation
-- Regression Testing
-- Integration Testing
-- Smoke Testing
-- Software Quality
-- Continuous Integration
-- Test Strategy
+- Visão Geral
+- O Problema
+- A Solução
+- Objetivos da Plataforma
+- Arquitetura
+- Componentes da Plataforma
+- Fluxo da Plataforma
+- Modelo de Domínio
+- Estratégia de Preparação de Massas
+- Movimentações Financeiras
+- Estratégia de Validação
+- Auditoria
+- Cenários Implementados
+- Roadmap
+- Princípios Arquiteturais
+- Tecnologias
+- Estrutura do Projeto
+- Objetivo Final
 
 ---
 
-# Technology Stack
+# Visão Geral
 
-### Programming
+Sistemas financeiros possuem regras de negócio complexas, grande volume de dados e dependem da consistência das informações processadas para garantir segurança operacional.
 
-- Java
-- SQL
+Nesse contexto, validar apenas interfaces ou serviços não é suficiente.
 
-### Test Automation
+É necessário garantir que cálculos financeiros, regras de negócio, movimentações, processamento batch e resultados finais permaneçam consistentes durante toda a evolução do sistema.
 
-- Playwright
-- Selenium
-- JUnit 5
-- AssertJ
+A Financial Validation Platform foi projetada para atender exatamente esse cenário.
 
-### API Testing
-
-- REST Assured
-- SOAP
-- XML
-- Jackson
-
-### Database
-
-- SQL Server
-
-### Build & DevOps
-
-- Maven
-- Git
-- GitHub
-- GitHub Actions
-
-### Agile
-
-- Scrum
-- Kanban
-
-### Tools
-
-- IntelliJ IDEA
-- Postman
-- SoapUI
+Ao invés de centralizar a automação apenas na execução dos testes, a plataforma organiza todo o processo de validação financeira em módulos especializados, permitindo reutilização de conhecimento, padronização das validações e escalabilidade para diferentes projetos.
 
 ---
 
-# Featured Project
+# O Problema
 
-## QA Automation Framework
+Projetos financeiros normalmente apresentam desafios recorrentes durante a execução dos testes.
 
-Enterprise-oriented automation framework developed using Java and Playwright.
+Entre os principais estão:
 
-### Highlights
+- dificuldade para localizar massas de teste confiáveis;
+- preparação manual de cenários financeiros;
+- validação de cálculos complexos;
+- validação de regras após processamento batch;
+- dependência de conhecimento distribuído entre equipes;
+- dificuldade para reproduzir cenários;
+- ausência de auditoria das validações executadas.
 
-- Web Automation
-- SOAP Integration
-- SQL Server Validation
-- Dynamic Test Data
-- Page Object Model
-- Builder Pattern
-- Repository Pattern
-- Layered Architecture
-- GitHub Actions
-- Continuous Integration
-
-### Repository
-
-🔗 https://github.com/vanessalimaQA/automacao-quitacao
+Esses fatores tornam a manutenção dos testes mais complexa e aumentam o risco de inconsistências durante a evolução do sistema.
 
 ---
 
-# Engineering Principles
+# A Solução
 
-- Clean Code
-- SOLID
-- Design Patterns
-- Separation of Concerns
-- Low Coupling
-- High Cohesion
-- Maintainability
-- Scalability
-- Reusable Components
-- Continuous Improvement
+A Financial Validation Platform organiza todas essas responsabilidades em uma arquitetura única.
 
----
+Cada componente possui responsabilidades bem definidas e atua de forma independente, permitindo evolução contínua sem impacto nos demais módulos.
 
-# Current Focus
-
-Currently improving knowledge in:
-
-- REST API Automation
-- Framework Architecture
-- Docker
-- Allure Reports
-- Performance Testing
-- Software Quality Engineering
-
----
-
-# GitHub Analytics
-
-<p align="center">
-
-<img height="170" src="https://github-readme-stats.vercel.app/api?username=vanessalimaQA&show_icons=true&theme=github_dark&hide_border=true"/>
-
-<img height="170" src="https://github-readme-stats.vercel.app/api/top-langs/?username=vanessalimaQA&layout=compact&theme=github_dark&hide_border=true"/>
-
-</p>
-
----
-
-# Featured Technologies
-
-<p>
-
-<img src="https://skillicons.dev/icons?i=java,selenium,maven,git,github,docker"/>
-
-</p>
-
----
-
-# Professional Values
-
-✔ Software Quality
-
-✔ Automation
-
-✔ Engineering
-
-✔ Collaboration
-
-✔ Continuous Improvement
-
-✔ Maintainability
-
-✔ Reliability
-
-✔ Scalability
-
----
-
-# Let's Connect
-
-💼 LinkedIn
-
-https://www.linkedin.com/in/vanessa-ads/
-
-💻 GitHub
-
-https://github.com/vanessalimaQA
-
----
-
-<div align="center">
-
-### Building software quality through automation, engineering and continuous improvement.
-
-</div>
+A plataforma foi construída seguindo princípios de Engenharia de Software, permitindo reutilização de código, centralização das regras financeiras e separação entre domínio de negócio e implementação técnica.
