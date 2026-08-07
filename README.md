@@ -2,306 +2,169 @@
 
 # Financial Validation Platform
 
-### Framework de Quality Engineering e Automação para Validações Financeiras
+### Automação de Testes & Quality Engineering aplicada a fluxos financeiros
 
-**Java 21 • Playwright • REST Assured • SOAP • SQL Server • JUnit 5 • Maven**
+**Java 21 · Playwright · REST Assured · SOAP · SQL Server · JUnit 5 · Maven · Allure**
 
-Uma arquitetura de automação criada para validar fluxos financeiros complexos através das camadas de **Web, API, SOAP, Banco de Dados e processamento Batch**.
+Framework de automação desenvolvido para validar operações financeiras em múltiplas camadas, combinando **Web, APIs, serviços SOAP, banco de dados, regras de negócio e processamento batch** em uma arquitetura orientada a domínio e preparada para evolução.
 
-<br>
-
-**Desenvolvido por Vanessa Lima**
-*QA Automation • Quality Engineering*
+**Vanessa Lima**
+QA Automation | Quality Engineering
 
 </div>
 
 ---
 
-## ✦ Sobre o projeto
+## O problema que este projeto resolve
 
-Validar um sistema financeiro vai muito além de verificar se uma tela abriu corretamente ou se uma API retornou `200 OK`.
+Em sistemas financeiros, validar apenas a interface ou o retorno de uma API não é suficiente.
 
-Uma única operação financeira pode atravessar diferentes camadas até chegar ao seu resultado final:
+Uma operação pode ser aceita na entrada e ainda produzir um resultado financeiro incorreto depois do processamento.
+
+Um pagamento, por exemplo, pode atravessar:
 
 ```text
-Massa de Teste
-      ↓
-Web / API / SOAP
-      ↓
-Regras de Negócio
-      ↓
-Processamento Financeiro
-      ↓
-Banco de Dados
-      ↓
+Massa financeira
+      │
+      ▼
+Web / REST / SOAP
+      │
+      ▼
+Regra de negócio
+      │
+      ▼
+Persistência
+      │
+      ▼
 Processamento Batch
-      ↓
-Validação Pós-Processamento
+      │
+      ▼
+Estado financeiro resultante
 ```
 
-A **Financial Validation Platform** nasceu a partir dessa necessidade.
+Por isso, este projeto não foi estruturado como uma coleção de scripts E2E.
 
-O projeto está sendo desenvolvido como uma plataforma de automação capaz de validar um fluxo financeiro desde a entrada da operação até o resultado persistido após o processamento.
-
-A arquitetura separa responsabilidades entre:
-
-* regras de negócio;
-* cálculos financeiros;
-* dados de teste;
-* integrações;
-* acesso ao banco;
-* execução dos cenários;
-* validações;
-* evidências e relatórios.
-
-O objetivo não é apenas automatizar casos de teste.
-
-> **O objetivo é construir uma plataforma onde regras financeiras possam ser validadas de forma reutilizável, rastreável e independente da tecnologia utilizada para executar a operação.**
+A proposta é construir uma **plataforma de validação financeira** capaz de verificar o comportamento da operação em diferentes pontos do fluxo e manter as regras de negócio independentes do canal utilizado para executá-las.
 
 ---
 
-# ✦ Princípios de Engenharia
+## Visão da solução
 
-Algumas decisões orientam a construção do framework.
+A arquitetura foi dividida para responder quatro perguntas diferentes:
 
-### Regra de negócio não deve depender da interface
+| Pergunta                             | Responsabilidade        |
+| ------------------------------------ | ----------------------- |
+| Qual cenário quero validar?          | `PaymentScenario`       |
+| Qual é a regra financeira?           | Business Layer          |
+| Como a operação será executada?      | Integration Layer       |
+| O resultado persistido está correto? | Repository + Validators |
 
-Os cálculos financeiros ficam isolados na camada de negócio.
-
-Isso permite validar uma regra sem precisar abrir navegador, chamar API ou acessar banco de dados.
-
----
-
-### Testes de integração não devem impedir o desenvolvimento local
-
-Testes que dependem de SQL Server ou ambientes externos são separados da suíte padrão.
-
-Assim:
-
-```bash
-mvn test
-```
-
-continua executando os testes locais mesmo quando o desenvolvedor não possui acesso à infraestrutura corporativa.
-
----
-
-### Massa de teste deve representar cenários de negócio
-
-Valores financeiros não ficam espalhados arbitrariamente pelos testes.
-
-Os cenários são modelados explicitamente:
+Isso evita concentrar regra de negócio, SQL, chamadas externas e assertions dentro do mesmo teste.
 
 ```text
-Pagamento abaixo do mínimo
-Pagamento mínimo
-Pagamento parcial
-Pagamento total
-Pagamento acima do total
+                        ┌─────────────────────┐
+                        │      Test Layer     │
+                        └──────────┬──────────┘
+                                   │
+                                   ▼
+                        ┌─────────────────────┐
+                        │        Flow         │
+                        │   Orquestração      │
+                        └──────────┬──────────┘
+                                   │
+                                   ▼
+                 ┌─────────────────────────────────┐
+                 │         Business Layer          │
+                 │                                 │
+                 │ Scenario → Resolver → Calculator│
+                 │          → Context              │
+                 └───────────────┬─────────────────┘
+                                 │
+                                 ▼
+                       PaymentInstruction
+                                 │
+                  ┌──────────────┼──────────────┐
+                  ▼              ▼              ▼
+                REST            SOAP            Web
+                  │              │              │
+                  └──────────────┼──────────────┘
+                                 ▼
+                              Sistema
+                                 │
+                                 ▼
+                            SQL Server
+                                 │
+                                 ▼
+                           Validators
 ```
+
+### Decisão central da arquitetura
+
+`PaymentInstruction` não conhece Playwright, REST Assured, SOAP ou SQL.
+
+Ela representa **o que deve ser executado**, não **como será executado**.
+
+Isso permite que a regra financeira continue reutilizável mesmo quando o mecanismo de integração muda.
 
 ---
 
-### Infraestrutura deve ser substituível
+## Cenário implementado: pagamentos de fatura
 
-A regra financeira não precisa saber se a operação será executada futuramente por:
+O primeiro domínio financeiro modelado pela plataforma é pagamento de fatura.
+
+Foram implementados seis comportamentos:
+
+| Cenário         | Comportamento                                  |
+| --------------- | ---------------------------------------------- |
+| `BELOW_MINIMUM` | pagamento abaixo do mínimo                     |
+| `MINIMUM`       | pagamento exatamente no mínimo                 |
+| `PARTIAL_20`    | pagamento parcial dentro da faixa mínimo/total |
+| `PARTIAL_60`    | segundo ponto da faixa parcial                 |
+| `TOTAL`         | pagamento integral                             |
+| `ABOVE_TOTAL`   | pagamento superior ao saldo da fatura          |
+
+A intenção não é criar massas com valores fixos.
+
+O valor é calculado a partir dos dados reais da fatura.
+
+### Exemplo
+
+Para:
 
 ```text
-SOAP
-REST
-Web
-Banco
-Batch
+Total  = R$ 250,00
+Mínimo = R$ 200,00
 ```
 
-A camada de negócio permanece independente da tecnologia.
+temos:
+
+```text
+Faixa disponível = Total - Mínimo
+                  = 250 - 200
+                  = 50
+```
+
+O cenário `PARTIAL_20` produz:
+
+```text
+200 + (50 × 20%) = R$ 210,00
+```
+
+Enquanto `PARTIAL_60` produz:
+
+```text
+200 + (50 × 60%) = R$ 230,00
+```
+
+Consequentemente, a mesma regra funciona para diferentes faturas sem depender de valores mágicos inseridos nos testes.
+
+Todos os cálculos monetários utilizam `BigDecimal`.
 
 ---
 
-### Valores financeiros exigem precisão
+## Como uma regra vira um teste
 
-Cálculos monetários utilizam:
-
-```java
-BigDecimal
-```
-
-evitando problemas de precisão associados a tipos de ponto flutuante.
-
----
-
-# ✦ Arquitetura
-
-O framework utiliza uma arquitetura em camadas para manter responsabilidades bem definidas.
-
-```text
-                         TEST LAYER
-                             │
-                             ▼
-                    Cenários / Test Flow
-                             │
-                             ▼
-                      BUSINESS LAYER
-              ┌──────────────┼──────────────┐
-              │              │              │
-              ▼              ▼              ▼
-        Regras Financeiras  Cálculos    Validators
-              │              │              │
-              └──────────────┼──────────────┘
-                             │
-                             ▼
-                    INTEGRATION LAYER
-              ┌──────────────┼──────────────┐
-              │              │              │
-              ▼              ▼              ▼
-             REST           SOAP         Database
-              │              │              │
-              └──────────────┼──────────────┘
-                             │
-                             ▼
-                     Sistemas Externos
-```
-
-Essa separação permite que regras financeiras sejam testadas localmente enquanto integrações são executadas somente nos ambientes onde a infraestrutura necessária está disponível.
-
----
-
-# ✦ Estrutura do projeto
-
-```text
-src
-├── main
-│   └── java
-│       └── com.automation
-│
-│           ├── business
-│           │   └── Regras e cálculos financeiros
-│           │
-│           ├── config
-│           │   └── Configuração de ambientes
-│           │
-│           ├── core
-│           │   └── Infraestrutura do framework
-│           │
-│           ├── database
-│           │   └── JDBC e utilitários de banco
-│           │
-│           ├── excel
-│           │   └── Suporte a testes Data-Driven
-│           │
-│           ├── factory
-│           │   └── Factories do framework
-│           │
-│           ├── flow
-│           │   └── Orquestração dos fluxos
-│           │
-│           ├── integrations
-│           │   ├── rest
-│           │   └── soap
-│           │
-│           ├── model
-│           │   └── Modelos de domínio
-│           │
-│           ├── pages
-│           │   └── Page Objects
-│           │
-│           ├── repository
-│           │   └── Acesso aos dados
-│           │
-│           ├── testdata
-│           │   └── Geração e preparação de massas
-│           │
-│           ├── utils
-│           │   └── Utilitários compartilhados
-│           │
-│           └── validator
-│               └── Validações de domínio
-│
-└── test
-    └── java
-        └── com.automation.tests
-            ├── builder
-            ├── business
-            ├── excel
-            ├── fixtures
-            ├── flow
-            ├── rest
-            ├── service
-            ├── testdata
-            ├── validator
-            └── web
-```
-
----
-
-# ✦ Domínio Financeiro
-
-Uma das principais áreas atualmente implementadas é a validação de **pagamentos de fatura**.
-
-Em vez de definir valores fixos diretamente nos testes, o framework representa cada comportamento através de cenários financeiros.
-
-| Cenário         | Regra                                                    |
-| --------------- | -------------------------------------------------------- |
-| `BELOW_MINIMUM` | Pagamento abaixo do valor mínimo                         |
-| `MINIMUM`       | Pagamento exatamente no valor mínimo                     |
-| `PARTIAL_20`    | Pagamento parcial utilizando 20% do intervalo disponível |
-| `PARTIAL_60`    | Pagamento parcial utilizando 60% do intervalo disponível |
-| `TOTAL`         | Pagamento integral da fatura                             |
-| `ABOVE_TOTAL`   | Pagamento acima do valor total                           |
-
----
-
-# ✦ Cálculos Financeiros Dinâmicos
-
-Considere uma fatura:
-
-```text
-Valor Total  = R$ 250,00
-Valor Mínimo = R$ 200,00
-```
-
-Para gerar pagamentos parciais, o framework primeiro calcula:
-
-```text
-diferença = valorTotal - valorMinimo
-```
-
-Resultado:
-
-```text
-diferença = 250 - 200
-diferença = 50
-```
-
-### Pagamento parcial de 20%
-
-```text
-pagamento = mínimo + (diferença × 20%)
-
-pagamento = 200 + 10
-
-pagamento = R$ 210,00
-```
-
-### Pagamento parcial de 60%
-
-```text
-pagamento = mínimo + (diferença × 60%)
-
-pagamento = 200 + 30
-
-pagamento = R$ 230,00
-```
-
-Com isso, os testes não dependem de valores arbitrários.
-
-Uma fatura de R$ 250,00 e outra de R$ 3.000,00 podem utilizar exatamente o mesmo cenário.
-
----
-
-# ✦ Pipeline dos Cenários Financeiros
-
-Atualmente, a preparação de um pagamento percorre:
+O pipeline financeiro implementado atualmente é:
 
 ```text
 InvoicePaymentData
@@ -325,53 +188,72 @@ PaymentScenarioFlow
 PaymentInstruction
 ```
 
-Cada componente possui uma responsabilidade específica.
-
 ### `InvoicePaymentData`
 
-Representa os dados financeiros necessários para o cenário.
+Transporta os dados necessários da fatura.
 
 ### `PaymentScenario`
 
-Representa **qual comportamento financeiro será testado**.
+Expressa a intenção do teste em linguagem de domínio.
 
 ### `PaymentScenarioResolver`
 
-Traduz o cenário para a regra financeira correspondente.
+Converte o cenário solicitado na regra correspondente.
 
 ### `PaymentAmountCalculator`
 
-Executa os cálculos monetários.
+Centraliza os cálculos financeiros e suas restrições.
 
 ### `PaymentContext`
 
-Mantém o contexto financeiro calculado.
+Representa o resultado da regra aplicada ao contexto da fatura.
 
 ### `PaymentScenarioFlow`
 
-Orquestra a preparação do cenário.
+Orquestra a preparação do cenário sem acoplar a regra à infraestrutura.
 
 ### `PaymentInstruction`
 
-Produz uma instrução de pagamento independente da tecnologia que futuramente executará a operação.
+Entrega uma instrução pronta para ser consumida posteriormente por um mecanismo de execução.
 
 ---
 
-# ✦ Validação em Banco de Dados
+## Estratégia de validação em banco
 
-O acesso ao banco é isolado através de repositories e infraestrutura JDBC.
+A camada de persistência não é acessada diretamente pelos testes.
 
-Uma das relações utilizadas atualmente é:
+O framework utiliza:
+
+```text
+Test
+  │
+  ▼
+Flow / Business
+  │
+  ▼
+Repository
+  │
+  ▼
+DatabaseExecutor
+  │
+  ▼
+JDBC
+  │
+  ▼
+SQL Server
+```
+
+Para o domínio de faturas, uma das relações utilizadas é:
 
 ```text
 BoletosEmitidos
-       │
-       │ Id_Historico
-       ▼
+      │
+      │ Id_Historico
+      ▼
 HistoricosCorrentes
 ```
 
-Essa relação permite recuperar informações financeiras como:
+A partir dela, a automação pode trabalhar com informações como:
 
 ```text
 Id_Conta
@@ -381,114 +263,207 @@ saldoAtualFinal
 valorMinimoExtrato
 ```
 
-Para os cenários atuais de pagamento de fatura, utilizamos inicialmente:
+O repository atual prepara a seleção da fatura mensal utilizando `id_tipoboleto = 7`.
 
-```text
-id_tipoboleto = 7
-```
+A query permanece encapsulada no repository.
 
-As queries ficam isoladas dos testes.
+O teste conhece **comportamento**.
 
-Isso mantém a responsabilidade clara:
-
-```text
-TESTE
-  ↓
-FLOW
-  ↓
-BUSINESS
-  ↓
-REPOSITORY
-  ↓
-DATABASE
-```
-
-O teste valida comportamento.
-
-O repository conhece SQL.
+O repository conhece **persistência**.
 
 ---
 
-# ✦ Estratégia de Testes
+## Estratégia de testes
 
-O framework separa diferentes níveis de validação.
+Nem todo teste precisa chegar até a interface.
+
+A suíte foi estruturada para testar cada responsabilidade no nível adequado.
 
 ```text
-                 ┌─────────────────────┐
-                 │       E2E           │
-                 └──────────┬──────────┘
-                            │
-                 ┌──────────▼──────────┐
-                 │     Integração      │
-                 └──────────┬──────────┘
-                            │
-                 ┌──────────▼──────────┐
-                 │ Regras de Negócio   │
-                 └──────────┬──────────┘
-                            │
-                 ┌──────────▼──────────┐
-                 │     Unitários       │
-                 └─────────────────────┘
+                  E2E
+                   ▲
+                  / \
+                 /   \
+                /     \
+         Integração    \
+              ▲         \
+             /           \
+      Business / Flow     \
+            ▲              \
+           /________________\
+              Unitários
 ```
 
-A ideia é validar a regra o mais próximo possível do domínio e utilizar testes End-to-End quando realmente precisamos provar a integração entre diferentes componentes.
+### Testes unitários
 
-Isso reduz:
+Validam componentes como:
 
-* tempo de execução;
-* dependência de ambiente;
-* falsos negativos;
-* manutenção desnecessária.
+* cálculos financeiros;
+* contextos;
+* factories;
+* resolvers;
+* builders;
+* validators;
+* geração de massa.
 
----
+São rápidos e independentes de infraestrutura.
 
-# ✦ Testes Locais
+### Testes parametrizados
 
-A suíte principal pode ser executada com:
+Os diferentes cenários financeiros percorrem o mesmo fluxo através de testes parametrizados, reduzindo duplicação e aumentando cobertura comportamental.
 
-```bash
-mvn test
-```
+### Testes de integração
 
-Testes dependentes de infraestrutura externa não participam da execução padrão.
-
----
-
-# ✦ Testes de Integração
-
-Testes que precisam de banco ou infraestrutura real são identificados com:
+Cenários que dependem de infraestrutura são identificados explicitamente:
 
 ```java
 @Tag("integration")
 ```
 
-O Maven exclui por padrão:
+A suíte padrão exclui:
 
 ```text
 external
 integration
 ```
 
-Isso permite que qualquer pessoa clone o projeto e execute a suíte local sem possuir acesso ao SQL Server utilizado nos testes de integração.
+Assim:
+
+```bash
+mvn test
+```
+
+continua funcionando em uma máquina sem acesso ao SQL Server corporativo.
+
+Isso também cria uma separação clara para futura execução em pipeline.
 
 ---
 
-# ✦ Segurança e Configuração
+## Integrações suportadas
 
-Credenciais não devem fazer parte do código-fonte.
+### Web
 
-Arquivos locais contendo informações sensíveis são ignorados pelo Git.
+Automação construída com **Playwright**, utilizando abstrações para browser, context e Page Objects.
 
-O projeto utiliza templates seguros:
+### REST
+
+Estrutura com **REST Assured**, incluindo:
+
+* `ApiClient`
+* `ApiConfig`
+* `RequestSpecFactory`
+* `ResponseSpecFactory`
+* requests e responses tipados
+
+### SOAP
+
+Camada própria contendo:
+
+```text
+Builder
+   ↓
+Request
+   ↓
+SoapClient
+   ↓
+Response
+   ↓
+Parser
+   ↓
+Service
+```
+
+Isso evita XML sendo montado diretamente dentro dos testes.
+
+### Database
+
+Infraestrutura JDBC separada em:
+
+```text
+DatabaseConfig
+DatabaseConnection
+DatabaseExecutor
+DatabaseAccessor
+RowMapper
+Repositories
+```
+
+---
+
+## Organização do código
+
+```text
+com.automation
+│
+├── business        # regras financeiras
+├── config          # configuração de ambiente
+├── core            # infraestrutura transversal
+├── database        # abstração JDBC
+├── excel           # Data-Driven Testing
+├── factory         # criação de componentes
+├── flow            # orquestração de cenários
+├── integrations
+│   ├── rest
+│   └── soap
+├── locators
+├── model           # modelos de domínio
+├── pages           # Page Objects
+├── repository      # persistência
+├── testdata        # criação e validação de massas
+├── utils
+└── validator       # validações reutilizáveis
+```
+
+A estrutura de testes acompanha as responsabilidades da aplicação:
+
+```text
+tests
+├── builder
+├── business
+├── excel
+├── fixtures
+├── flow
+├── rest
+├── service
+├── testdata
+├── validator
+└── web
+```
+
+---
+
+## Stack técnica
+
+| Responsabilidade       | Tecnologia        |
+| ---------------------- | ----------------- |
+| Linguagem              | Java 21           |
+| Build & dependências   | Maven             |
+| Test Runner            | JUnit 5           |
+| Assertions             | AssertJ           |
+| Web                    | Playwright        |
+| REST                   | REST Assured      |
+| SOAP                   | Apache HttpClient |
+| Database               | JDBC + SQL Server |
+| Serialização JSON      | Jackson           |
+| Data-Driven            | Apache POI        |
+| Test Data              | Datafaker         |
+| Redução de boilerplate | Lombok            |
+| Evidências / Reporting | Allure            |
+
+---
+
+## Segurança de configuração
+
+Credenciais não fazem parte do código-fonte.
+
+Arquivos locais de configuração são ignorados pelo Git e o repositório mantém apenas templates:
 
 ```text
 application.properties.example
 users.properties.example
 ```
 
-Cada ambiente pode criar sua própria configuração local.
-
-Informações sensíveis também podem ser fornecidas através de variáveis de ambiente:
+Configurações sensíveis também podem ser fornecidas por:
 
 ```text
 DB_URL
@@ -496,148 +471,174 @@ DB_USER
 DB_PASSWORD
 ```
 
-Exemplo:
+ou propriedades da JVM.
 
-```powershell
-$env:DB_URL="jdbc:sqlserver://SERVER:PORT;databaseName=DATABASE"
-$env:DB_USER="YOUR_USER"
-$env:DB_PASSWORD="YOUR_PASSWORD"
+A precedência de configuração permite:
+
+```text
+JVM Property
+     ↓
+Environment Variable
+     ↓
+Environment Properties
 ```
 
-> **Nenhuma credencial real deve ser versionada no repositório.**
+Essa abordagem facilita execução local e futura integração com CI/CD sem inserir secrets no código.
 
 ---
 
-# ✦ Stack Tecnológica
+## Executando o projeto
 
-| Área            | Tecnologia        |
-| --------------- | ----------------- |
-| Linguagem       | Java 21           |
-| Build           | Maven             |
-| Test Framework  | JUnit 5           |
-| Assertions      | AssertJ           |
-| Web Automation  | Playwright        |
-| REST API        | REST Assured      |
-| SOAP            | Apache HttpClient |
-| Banco de Dados  | SQL Server + JDBC |
-| JSON            | Jackson           |
-| Massa de Testes | Datafaker         |
-| Excel           | Apache POI        |
-| Boilerplate     | Lombok            |
-| Reporting       | Allure            |
+### Pré-requisitos
+
+```text
+Java 21+
+Maven 3.9+
+```
+
+### Executar a suíte local
+
+```bash
+mvn clean test
+```
+
+A suíte padrão não depende de acesso ao banco corporativo.
+
+### Compilar os testes de integração
+
+```bash
+mvn test-compile
+```
+
+Testes externos devem ser executados somente em ambientes autorizados e com as configurações necessárias disponíveis.
 
 ---
 
-# ✦ Capacidades Atuais
+## Evidências de engenharia presentes no projeto
 
-O framework já possui suporte para:
+Este repositório não concentra sua complexidade em um único teste E2E.
 
-* automação Web com Playwright;
-* Page Objects;
-* testes REST;
-* infraestrutura para SOAP;
-* builders de requests SOAP;
-* parsing de responses SOAP;
-* SQL Server via JDBC;
-* Repository Pattern;
-* testes Data-Driven com Excel;
-* geração de dados com Datafaker;
-* regras de cálculo financeiro;
-* modelagem de cenários de pagamento;
+As principais decisões implementadas incluem:
+
+* separação entre domínio e infraestrutura;
+* modelagem explícita de cenários financeiros;
+* cálculo monetário com `BigDecimal`;
+* Repository Pattern para persistência;
+* abstração JDBC reutilizável;
+* clientes independentes para REST e SOAP;
+* builders para requests;
+* responses tipados;
+* factories para criação de contexto;
 * fixtures reutilizáveis;
 * testes parametrizados;
-* separação entre testes locais e integração;
-* evidências e relatórios com Allure.
+* validações isoladas;
+* configuração por ambiente;
+* separação entre testes locais e testes de integração;
+* proteção de credenciais;
+* estrutura preparada para expansão pós-batch.
 
 ---
 
-# ✦ Roadmap
+## Próxima etapa: validação financeira pós-batch
 
-A plataforma está sendo construída de forma incremental.
-
-```text
-✓ Fundação do framework
-✓ Automação Web
-✓ Infraestrutura REST
-✓ Infraestrutura SOAP
-✓ Abstração de banco de dados
-✓ Regras financeiras de pagamento
-✓ Modelagem dos cenários
-✓ Fixtures financeiras
-✓ Isolamento dos testes de integração
-
-→ Validação com SQL Server real
-→ Seleção dinâmica de massas financeiras
-→ Execução de pagamentos
-→ Snapshot pré-batch
-→ Processamento Batch
-→ Validação pós-batch
-→ Validação de parcelamento
-→ Validação de quitação
-→ Expansão da regressão financeira
-→ Pipeline CI/CD
-```
-
----
-
-# ✦ Próxima Evolução: Validação Pós-Batch
-
-Uma das evoluções planejadas é permitir que a plataforma capture o estado financeiro de uma conta antes do processamento:
+A evolução mais importante da plataforma é a estratégia de snapshots.
 
 ```text
-Conta
-  ↓
-Snapshot Pré-Batch
-  ↓
-Execução da operação
-  ↓
-Batch
-  ↓
-Snapshot Pós-Batch
-  ↓
+Selecionar massa
+      │
+      ▼
+Snapshot financeiro inicial
+      │
+      ▼
+Executar operação
+      │
+      ▼
+Processamento Batch
+      │
+      ▼
+Snapshot financeiro final
+      │
+      ▼
 Comparação
-  ↓
-Validação financeira
+      │
+      ▼
+Business Assertions
 ```
 
-Com isso, a automação poderá validar não apenas se uma operação foi executada, mas se **o resultado financeiro produzido pelo processamento está correto**.
+O objetivo é permitir validações como:
+
+> dado um estado financeiro conhecido antes do processamento, o estado produzido depois do batch corresponde exatamente às regras esperadas?
+
+Essa estratégia permitirá evoluir a plataforma para cenários de:
+
+* pagamento de fatura;
+* parcelamento;
+* refinanciamento;
+* quitação;
+* cálculos pós-processamento;
+* regressão financeira.
 
 ---
 
-# ✦ Quality Engineering na prática
-
-Para mim, automação de testes não deve ser apenas uma sequência de comandos executados contra uma aplicação.
-
-Ela precisa ajudar a responder perguntas importantes:
+## Roadmap técnico
 
 ```text
-A regra de negócio foi respeitada?
+[✓] Fundação Web
+[✓] Infraestrutura REST
+[✓] Infraestrutura SOAP
+[✓] Abstração JDBC
+[✓] Data-Driven Testing
+[✓] Geração de massa
+[✓] Domínio financeiro
+[✓] Cálculos de pagamento
+[✓] Cenários parametrizados
+[✓] Isolamento de integração
 
-O cálculo está correto?
-
-O dado persistido corresponde à operação realizada?
-
-O processamento alterou exatamente o que deveria?
-
-Se algo falhar, conseguimos identificar onde e por quê?
+[→] Integração com massa financeira real
+[→] Seleção automática de contas
+[→] Execução dos pagamentos
+[→] Snapshot pré-batch
+[→] Snapshot pós-batch
+[→] Business Assertions pós-processamento
+[→] Validação de parcelamento
+[→] Validação de quitação
+[→] Expansão da regressão financeira
+[→] CI/CD
 ```
 
-É essa visão que estou aplicando na construção deste projeto.
+---
 
-Quero que o framework continue evoluindo não apenas em quantidade de testes, mas principalmente em **qualidade de arquitetura, confiabilidade e entendimento do negócio**.
+## O que este projeto representa
 
-Porque uma boa automação não é aquela que simplesmente executa muitos testes.
+Este projeto nasceu de uma decisão que considero importante na minha evolução em Quality Engineering:
 
-**É aquela que gera confiança no produto que está sendo entregue.**
+**não quero apenas automatizar passos; quero entender o comportamento que estou validando.**
+
+Por isso, conforme o framework evolui, minha preocupação não está apenas em adicionar novas ferramentas.
+
+Está em responder perguntas melhores:
+
+* Qual regra de negócio estamos protegendo?
+* Qual dado prova que ela funcionou?
+* Em qual camada essa validação deveria acontecer?
+* O teste realmente precisa de interface?
+* Como separar falha de infraestrutura de falha de negócio?
+* Como reutilizar uma regra em diferentes canais?
+* Como tornar uma validação financeira reproduzível?
+* Como descobrir rapidamente onde uma regressão aconteceu?
+
+Para mim, maturidade em automação começa quando deixamos de medir qualidade pela quantidade de scripts e começamos a construir **confiança sobre o comportamento do produto**.
 
 ---
 
 <div align="center">
 
-## Vanessa Lima
+### Vanessa Lima
 
-### QA Automation • Quality Engineering
+**QA Automation · Quality Engineering**
 
-*Transformando regras de negócio em validações automatizadas, confiáveis e escaláveis.*
+Java · Playwright · API Testing · SQL · Test Architecture
+
+**Automação com propósito: entender o negócio, estruturar a validação e gerar confiança no resultado.**
 
 </div>
